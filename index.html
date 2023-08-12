@@ -29,8 +29,9 @@
           deleteTodo(data.id);
         };
         btn.innerText = "Delete";
-        span2.append(btn);
         span2.append(checkbox);
+        span2.append(btn);
+
         //   div.innerHTML =
         div.append(h4);
         div.append(span1);
@@ -39,6 +40,7 @@
       }
     };
     const getTodos = () => {
+      console.log("get");
       fetch("https://64d74eef2a017531bc132085.mockapi.io/todos", {
         method: "get",
       })
