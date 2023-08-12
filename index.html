@@ -7,6 +7,7 @@
   </head>
   <link rel="stylesheet" href="style.css" />
   <script>
+    //get
     const showTodos = (datas) => {
       const todoContainer = document.getElementById("todolist-container");
       todoContainer.innerHTML = "";
@@ -18,8 +19,18 @@
         span1.innerText = data.desc;
         const span2 = document.createElement("span");
         const btn = document.createElement("button");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = data.check;
+        checkbox.onclick = function () {
+          checkTodo(data.id, !data.check);
+        };
+        btn.onclick = function () {
+          deleteTodo(data.id);
+        };
         btn.innerText = "Delete";
         span2.append(btn);
+        span2.append(checkbox);
         //   div.innerHTML =
         div.append(h4);
         div.append(span1);
@@ -34,9 +45,14 @@
         .then((res) => res.json())
         .then((res) => {
           showTodos(res);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     };
     getTodos();
+
+    //post
     const postTodo = () => {
       const title = document.getElementById("title").value;
       const desc = document.getElementById("desc").value;
@@ -58,6 +74,45 @@
           document.getElementById("title").value = "";
           document.getElementById("desc").value = "";
           getTodos();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    //delete
+    const deleteTodo = (id) => {
+      fetch(`https://64d74eef2a017531bc132085.mockapi.io/todos/${id}`, {
+        method: "delete",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          getTodos();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    //update
+    const checkTodo = (id, checkType) => {
+      fetch(`https://64d74eef2a017531bc132085.mockapi.io/todos/${id}`, {
+        method: "put",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          check: checkType,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          getTodos();
+        })
+        .catch((err) => {
+          console.log(err);
         });
     };
   </script>
